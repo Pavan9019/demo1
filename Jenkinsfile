@@ -1,12 +1,19 @@
 pipeline {
-    agent { label 'node1' }
+    agent none
 
     stages {
-        stage('Build') {
+        stage('Build on any') {
+            agent any
             steps {
-                echo 'Building on agent node1'
+                echo 'This runs on any available agent'
+            }
+        }
+
+        stage('Build on labeled node') {
+            agent { label 'node1' }
+            steps {
+                echo 'This runs only on agent with label node1'
             }
         }
     }
 }
-
