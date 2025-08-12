@@ -1,18 +1,10 @@
 pipeline {
-    agent none
-
+    agent { label 'server2' }
     stages {
-        stage('Build on any') {
-            agent any
+        stage('Test') {
             steps {
-                echo 'This runs on any available agent'
-            }
-        }
-
-        stage('Build on labeled node') {
-            agent { label 'node1' }
-            steps {
-                echo 'This runs only on agent with label node1'
+                sh 'hostname'
+                sh 'whoami'
             }
         }
     }
