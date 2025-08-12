@@ -1,5 +1,6 @@
 pipeline {
   agent any
+
   stages {
     stage('BUILD') {
       steps {
@@ -10,22 +11,15 @@ pipeline {
         '''
       }
     }
+
     stage('TEST') {
       steps {
-        script {
-          def testStatus = sh(script: 'sleep 5; exit 1', returnStatus: true)
-          if (testStatus != 0) {
-            echo "Test stage failed but continuing..."
-          }
-        }
+        echo "This is Test stage"
+        sh 'sleep 5; exit 1'  // This will fail the build, remove or modify if you want
       }
     }
-    stage('DEPLOY') {
-      steps {
-        echo "This is Deploy stage"
-        sh 'sleep 5'
-      }
-    }
-  }
-}
+
+    stage('Parallel Deployment') {
+      parallel {
+        stage('Deploy to Server 1')
 
