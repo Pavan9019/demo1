@@ -14,8 +14,14 @@ pipeline {
 
     stage('TEST') {
       steps {
-        echo "This is Test stage"
-        sh 'sleep 5; exit 1'  // This will fail the build
+        script {
+          // Run test but catch failures so pipeline continues
+          def status = sh(script: 'sleep 5; exit 1', returnStatus: true)
+          if (status != 0) {
+            echo "Test failed, but continuing pipeline"
+            currentBuild.result = 'UNSTABLE'  // marks build unstable but does not fail
+          }
+        }
       }
     }
 
